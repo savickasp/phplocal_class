@@ -1,0 +1,3 @@
+// file_get_content('file.txt')
+// paima failo turini ir galima priskirti jam reiksme
+// _____________________________________________________

@@ -1,74 +1,33 @@
 <?php
-function dnd($var)
-{
-    print '<pre>';
-    print_r($var);
-    print '</pre>';
-}
+include_once 'functions.php';
 
-if (isset($_POST['equal'])) {
-    if ($_POST['action'] === '+') {
-        $sum = $_POST['numb1'] + $_POST['numb2'];
-    } elseif ($_POST['action'] === '-') {
-        $sum = $_POST['numb1'] - $_POST['numb2'];
-    } elseif ($_POST['action'] === '*') {
-        $sum = $_POST['numb1'] * $_POST['numb2'];
-    } elseif ($_POST['action'] === '/') {
-        $sum = $_POST['numb1'] / $_POST['numb2'];
-    } else {
-        die('ivyko klaida');
-    }
-    $saveAction = $_POST['numb1'] . $_POST['action'] . $_POST['numb2'] . '=' . $sum;
-
-    if (isset($_COOKIE['calc'])) {
-        $count = count($_COOKIE['calc']);
-    }else {
-        $count = 0;
-    }
-
-    setcookie("calc[$count]", "$saveAction", time() + 60);
+if (isset($_POST['submit'])) {
+    setcookie('user[name]', $_POST['name'], time() + 10);
+    setcookie('user[email]', $_POST['email'], time() + 10);
+    setcookie('user[role]', $_POST['role'], time() + 10);
     header('location:index.php');
 }
-?>
-<html>
-<head>
-    <title>Cookie</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
 
-        section {
-            width: 100vw;
-            height: 100vh;
-            background-color: chartreuse;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-    </style>
-</head>
-<body>
-<section>
-    <div>
-        <form method="post">
-            <input name="numb1" type="number">
-            <select name="action">
-                <option value="+">sum</option>
-                <option value="-">subtract</option>
-                <option value="*">multiply</option>
-                <option value="/">devide</option>
-            </select>
-            <input name="numb2" type="number">
-            <input name="equal" type="submit" value=" = ">
-        </form>
-    </div>
-    <div>
+if (isset($_COOKIE['user']['name']) && isset($_COOKIE['user']['email'])){
 
-        <?php dnd($_COOKIE['calc']) ?>
-    </div>
-</section>
-</body>
-</html>
+    if (isset($_COOKIE['user']['role'])) {
+        if ($_COOKIE['user']['role'] == 0) {
+            print 'Team leader page'; //include
+        }elseif ($_COOKIE['user']['role'] == 1) {
+            print 'team member page'; //include
+        }elseif ($_COOKIE['user']['role'] == 2) {
+            print 'user page'; //include
+        }else {
+            die('wrong role code');
+        }
+    }else {
+        $name = $_COOKIE['user']['name'];
+        $email = $_COOKIE['user']['email'];
+
+        print "Labas, $name, <br>Sveikas sugrizes i svetaine tavo pastas buvo: $email";
+
+        chooseSite();
+    }
+}else {
+    loginForm();
+}
